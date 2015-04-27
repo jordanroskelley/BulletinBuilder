@@ -1,0 +1,40 @@
+<h2>Home</h2>
+
+<p>Pick one below to edit, add a new blank one, or copy an existing one.</p>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h2 class="panel-title">Bulletins</h2>
+	</div>
+	<div class="panel-body">
+		<div ng-show="d.length > 0">
+			<div class="row" ng-repeat="bulletin in d">
+				--{{bulletin}}--
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label class="control-label">Date</label>
+						<input class="form-control" ng-model="bulletin.date"/>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label class="control-label">Copy</label>
+						<input class="form-control" ng-model="bulletin.date"/>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label class="control-label">Edit</label>
+						<input class="form-control" ng-model="bulletin.date"/>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div ng-hide="d.length > 0">
+			You have no bulletins yet. Hit load above, or add new below to get started.
+		</div>
+
+		<br><button class="btn btn-success" ng-click="addBulletin()">Add New</button>
+	</div>
+</div>

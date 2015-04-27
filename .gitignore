@@ -25,3 +25,16 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
+
+#Mac files
+.DS_Store
+
+#No need to check in cache files
+.sass-cache
+
+#And finally, project specific compiled files
+source/css/styles.min.css
+source/css/styles.min.css.map
+source/js/production.min.js
+source/js/production.min.js.map
+source/js/vendor.min.js
