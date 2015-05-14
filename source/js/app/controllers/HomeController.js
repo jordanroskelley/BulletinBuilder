@@ -10,7 +10,7 @@ function HomeController($scope, Data) {
 		);
 	}
 
-	// Begin Add a bulletin
+	// Begin Adding a bulletin
 	$scope.beginAdd = function () {
 		//if the list is empty, add one
 		if(!$scope.d) {
@@ -18,18 +18,20 @@ function HomeController($scope, Data) {
 		}
 
 		var now = new Date();
-		var dateStr = (now.getMonth()+1) + "/" + (now.getDate()) + "/" + (now.getFullYear())
+		var dateStr = (now.getMonth() + 1) + "/" + (now.getDate()) + "/" + (now.getFullYear())
+		
+		//TODO: should we hae an id? to make url stuff easier (like http://bulletinbuilder.com/edit/23)
 
 		//add an empty bulletin to the list
-		$scope.d.push({date: dateStr, status: 'isAdding'});
+		$scope.d.push({ date: dateStr, isAdding: true });
 	};
 
 	$scope.confirmAdd = function (index) {
 		$scope.d[index].status = null;
 	};
-	// End Add a bulletin
+	// End Adding a bulletin
 
-	// Begin Delete a bulletin
+	// Begin Deleting a bulletin
 	$scope.beginDelete = function (index) {
 		//user clicked delete, warn them first
 		$scope.d[i].isDeleting = true;
@@ -44,7 +46,7 @@ function HomeController($scope, Data) {
 		//remove a bulletin from the list
 		$scope.d.splice(index, 1);
 	};
-	// End Delete a bulletin
+	// End Deleting a bulletin
 	
 	$scope.copy = function (index) {
 		console.log('copy ' + index);

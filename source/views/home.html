@@ -20,13 +20,16 @@
 				</div>
 				
 				<div class='row' ng-show='bulletin.isAdding'>
-					
+					<div class='col-sm-12'>
+						Add New Here...
+					</div>
 				</div>
 				
 				<div class='row' ng-show='bulletin.isDeleting'>
-					
+					<div class='col-sm-12'>
+						Warn delete here...
+					</div>
 				</div>
-				
 			</div>
 			
 			<!--
@@ -74,7 +77,7 @@
 		</div>
 
 		<br>
-		<button class="btn btn-success" ng-click="addBulletin()">Add New</button>
+		<button class="btn btn-success" ng-click="beginAdd()">Add New</button>
 	</div>
 </div>
 
