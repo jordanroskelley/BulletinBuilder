@@ -1,9 +1,9 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		/**************************************************************************
-		* Concat and Minify JavaScript files
-		***************************************************************************/
+		/**************************************
+		 * Concat and Minify JavaScript files *
+		 **************************************/
 		uglify: {
 			debugMine: {
 				options: {
@@ -15,13 +15,13 @@ module.exports = function(grunt) {
 				files: {
 					'source/js/production.min.js':
 					[
-					'source/js/app/services/**.js',
-					'source/js/app/filters/**.js',
-					'source/js/app/controllers/**.js',
-					'source/js/app/directives/**.js',
-					'source/js/app/configs/**.js',
-					'source/js/app/misc/**.js',
-					'source/js/app/app.js',
+						'source/js/app/services/**.js',
+						'source/js/app/filters/**.js',
+						'source/js/app/controllers/**.js',
+						'source/js/app/directives/**.js',
+						'source/js/app/configs/**.js',
+						'source/js/app/misc/**.js',
+						'source/js/app/app.js',
 					]
 				}
 			},
@@ -29,43 +29,55 @@ module.exports = function(grunt) {
 				files: {
 					'source/js/vendor.min.js':
 					[
-					'source/js/vendor/jquery-2.1.3.js',
-					'source/js/vendor/lodash.js',
-					'source/js/vendor/bootstrap.js',
-					'source/js/vendor/angular.js',
-					'source/js/vendor/angular-route.js',
-					'source/js/vendor/FileSaver.js',
+						'bower_components/jquery/dist/jquery.js',
+						'bower_components/lodash/lodash.js',
+						'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
+						'bower_components/angular/angular.js',
+						'bower_components/angular-route/angular-route.js',
+						'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+						'bower_components/file-saver/FileSaver.js',
 					]
 				}
 			}
 		},
-		/**************************************************************************
-		* Compile SASS
-		***************************************************************************/
+		/****************************************
+		 * Copy static files into served folder *
+		 ****************************************/
+		copy: {
+			debug: {
+				cwd: 'bower_components/bootstrap-sass/assets/fonts/bootstrap',
+				src: '**/*',
+				dest: 'source/fonts',
+				expand: true,
+			},
+		},
+		/****************
+		 * Compile SASS *
+		 ****************/
 		sass: {
 			debug: {
 				options: {
 					style: 'compressed'
 				},
 				files: {
-					'source/css/styles.min.css':'source/css/sass/styles.scss',
+					'source/css/styles.min.css':
+					['source/css/sass/styles.scss'],
 				}
 			}
 		},
-		/**************************************************************************
-		* Run a static server
-		***************************************************************************/
+		/***********************
+		 * Run a static server *
+		 ***********************/
 		connect: {
 			server: {
 				options: {
-					port: 8000,
-					base: 'source',
+					base: ['source'],
 				}
 			}
 		},
-		/**************************************************************************
-		* Watch files for changes
-		***************************************************************************/
+		/***************************
+		 * Watch files for changes *
+		 ***************************/
 		watch: {
 			//anything in the sass folder
 			css: {
@@ -79,9 +91,7 @@ module.exports = function(grunt) {
 			// watch my javascript
 			myscripts: {
 				files: ['source/js/app/**'],
-				tasks: [
-					'uglify:debugMine'
-				],
+				tasks: ['uglify:debugMine'],
 			},
 			// turn on live reload
 			options: {
@@ -91,15 +101,14 @@ module.exports = function(grunt) {
 			// watch vendor javascript
 			vendorscripts: {
 				files: ['source/js/vendor/**'],
-				tasks: [
-					'uglify:debugVendor'
-				],
+				tasks: ['uglify:debugVendor'],
 			}
 		}
 		/* Close comments *********************************************************/
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
@@ -107,6 +116,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('debug',
 						'Serves a test-able site',
 						[
+							'copy:debug',
 							'uglify:debugMine',
 							'uglify:debugVendor',
 							'sass:debug',
