@@ -1,9 +1,8 @@
 function Data() {
 	var data = {};
 
-	data.data = null;
-
 	data.init = function () {
+		console.log('Data Factory - data.init');
 		if(!data.data) {
 		   data.loadData();
 		}
@@ -14,7 +13,7 @@ function Data() {
 		if(rawData) {
 			this.data = JSON.parse(rawData);
 		} else {
-			this.data = {};
+			this.data = [];
 		}
 	};
 

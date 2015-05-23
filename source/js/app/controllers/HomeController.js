@@ -1,72 +1,97 @@
-function HomeController($scope, Data) {
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/*
+TODO:
+-Allow reordering of bulletins (move up/down, drag and drop, something...)
+-Ideally be able to rename from list? but then how to separate rename from edit?
+*/
+
+function HomeController($scope, $location, Data) {
+	$scope.TESTING = "HELLO FROM HOME";
+	
 	// Preload data
 	function init() {
+		//set up data (load or initialize)
 		Data.init();
+		
+		//set data into scope
 		$scope.d = Data.data;
 
+		//watch data, if it changes, refresh scope
+		//TODO: if we do this, what happens (or should happen) to what is currently in scope?
 		$scope.$watch(
 			function () { return Data.data; },
 			function () { $scope.d = Data.data; }
 		);
 	}
 
-	// Begin Adding a bulletin
+	//-----------------------------------------BEGIN ADD NEW FUNCTIONS
 	$scope.beginAdd = function () {
-		//if the list is empty, add one
-		if(!$scope.d) {
-			$scope.d = [];
-		}
-
+		//get todays date (which is the default name)
 		var now = new Date();
-		var dateStr = (now.getMonth() + 1) + "/" + (now.getDate()) + "/" + (now.getFullYear())
+		var dateStr = (now.getMonth() + 1) + "/" + (now.getDate()) + "/" + (now.getFullYear());
 		
-		//TODO: should we hae an id? to make url stuff easier (like http://bulletinbuilder.com/edit/23)
+		//get the highest id plus one
+		var newId = getNextId();
 
 		//add an empty bulletin to the list
-		$scope.d.push({ date: dateStr, isAdding: true });
+		$scope.d.push({ id: newId, name: dateStr, isAdding: true });
 	};
-
-	$scope.confirmAdd = function (index) {
-		$scope.d[index].status = null;
+	
+	$scope.saveNew = function(index) {
+		//remove isAdding status
+		delete $scope.d[index]['isAdding'];
 	};
-	// End Adding a bulletin
+	
+	$scope.deleteNew = function(index) {
+		//delete Bulletin from array
+		$scope.d.splice(index, 1);
+	};
+	//-------------------------------------------END ADD NEW FUNCTIONS
 
-	// Begin Deleting a bulletin
+	//------------------------------------------BEGIN DELETE FUNCTIONS
 	$scope.beginDelete = function (index) {
 		//user clicked delete, warn them first
-		$scope.d[i].isDeleting = true;
+		$scope.d[index].isDeleting = true;
 	};
 	
 	$scope.cancelDelete = function(index) {
 		//clear deleting status
-		delete $scope.d[i]['isDeleting'];
+		delete $scope.d[index]['isDeleting'];
 	};
 	
 	$scope.confirmDelete = function(index) {
 		//remove a bulletin from the list
 		$scope.d.splice(index, 1);
 	};
-	// End Deleting a bulletin
+	//--------------------------------------------END DELETE FUNCTIONS
 	
+	//--------------------------------------------BEGIN COPY FUNCTIONS
 	$scope.copy = function (index) {
-		console.log('copy ' + index);
 		var copy = angular.copy($scope.d[index]);
+		copy.name = copy.name + " copy";
+		copy.id = getNextId();
 		$scope.d.push(copy);
 	};
 
 	$scope.edit = function (index) {
-		console.log('edit ' + index);
-		//TODO: redirect to editing pages
+		//redirect to specified bulletin
+		$location.path('bulletin/' + $scope.d[index].id);
 	};
+	//----------------------------------------------END COPY FUNCTIONS
 	
-	
-	//functions/setup for date picker
-	$scope.open = function($event) {
-		$event.preventDefault();
-		$event.stopPropagation();
-		
-		$scope.opened = true;
-	};
+	/**
+	 * Loop the bulletins, and get the max id plus one
+	 */
+	function getNextId() {
+		var maxId = 0;
+		_.forEach($scope.d, function(bulletin) {
+			if(bulletin.id > maxId) {
+				maxId = bulletin.id;
+			}
+		});
+		maxId++;
+		return maxId;
+	}
 
 	init();
 }

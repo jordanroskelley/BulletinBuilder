@@ -1,18 +1,27 @@
-function BulletinController($scope, $http, Data) {
+function BulletinController($scope, $routeParams, $http, Data) {
 	function init() {
 		Data.init();
-		$scope.d = Data.data,
+		
+		//get index of selected bulletin
+		var selectedIndex = -1;
+		selectedIndex = _.findIndex(Data.data, function(bulletin) {
+			console.log("Bulletin Id: " + bulletin.id + "\tRoute Id: " + $routeParams.id);
+			return bulletin.id == $routeParams.id;
+		});
+		
+		//bind single bulletin into scope
+		$scope.d = Data.data[selectedIndex];
 		$scope.$watch(
-			function () { return Data.data; },
-			function () { $scope.d = Data.data; }
+			function () { return Data.data[selectedIndex]; },
+			function () { $scope.d = Data.data[selectedIndex]; }
 		);
 	}
 
 	$scope.addBishopric = function () {
-		if($scope.d.bishopric) {
+		if(!$scope.d.bishopric) {
 			$scope.d.bishopric = [];
 		}
-		$scope.d.bishopric.push({});
+		$scope.d.bishopric.push({ });
 	};
 
 	$scope.removeBishopric = function (index) {
@@ -32,7 +41,7 @@ function BulletinController($scope, $http, Data) {
 	};
 
 	$scope.addMissionary = function () {
-		if($scope.d.missionaries) {
+		if(!$scope.d.missionaries) {
 			$scope.d.missionaries = [];
 		}
 
@@ -42,7 +51,15 @@ function BulletinController($scope, $http, Data) {
 	$scope.removeMissionary = function (index) {
 		$scope.d.missionaries.splice(index, 1);
 	};
-
+	
+	//functions/setup for date picker
+	$scope.open = function($event) {
+		$event.preventDefault();
+		$event.stopPropagation();
+		
+		$scope.opened = true;
+	};
+	
 	$http
 		.get("/data.json")
 		.success(function (data) {
