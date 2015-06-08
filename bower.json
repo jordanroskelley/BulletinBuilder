@@ -8,6 +8,7 @@
     "bootstrap-sass": "~3.3.4",
     "file-saver": "*",
     "jquery": "~2.1.4",
-    "lodash": "~3.8.0"
+    "lodash": "~3.8.0",
+	"angular-sortable-view": "~0.0.13"
   }
 }

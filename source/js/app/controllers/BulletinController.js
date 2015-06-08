@@ -1,4 +1,5 @@
-function BulletinController($scope, $routeParams, $http, Data) {
+/// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+function BulletinController($scope, $routeParams, $http, Data, Lookup) {
 	function init() {
 		Data.init();
 		
@@ -8,6 +9,11 @@ function BulletinController($scope, $routeParams, $http, Data) {
 			console.log("Bulletin Id: " + bulletin.id + "\tRoute Id: " + $routeParams.id);
 			return bulletin.id == $routeParams.id;
 		});
+		
+		//pull select list data into scope
+		$scope.bishopricPositions = Lookup.bishopricPositions;
+		$scope.leadershipPositions = Lookup.leadershipPositions;
+		$scope.eventTypes = Lookup.eventTypes;
 		
 		//bind single bulletin into scope
 		$scope.d = Data.data[selectedIndex];
@@ -51,6 +57,18 @@ function BulletinController($scope, $routeParams, $http, Data) {
 	$scope.removeMissionary = function (index) {
 		$scope.d.missionaries.splice(index, 1);
 	};
+
+	$scope.addAnnouncement = function () {
+		if(!$scope.d.announcements) {
+			$scope.d.announcements = [];
+		}
+
+		$scope.d.announcements.push({});
+	};
+
+	$scope.removeAnnouncement = function (index) {
+		$scope.d.announcements.splice(index, 1);
+	};
 	
 	//functions/setup for date picker
 	$scope.open = function($event) {
@@ -59,13 +77,6 @@ function BulletinController($scope, $routeParams, $http, Data) {
 		
 		$scope.opened = true;
 	};
-	
-	$http
-		.get("/data.json")
-		.success(function (data) {
-			$scope.bishopricPositions = data.bishopricPositions;
-			$scope.leadershipPositions = data.leadershipPositions;
-	});
 
 	init();
 }

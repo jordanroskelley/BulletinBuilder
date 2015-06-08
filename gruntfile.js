@@ -35,6 +35,7 @@ module.exports = function(grunt) {
 						'bower_components/angular/angular.js',
 						'bower_components/angular-route/angular-route.js',
 						'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+						'bower_components/angular-sortable-view/src/angular-sortable-view.js',
 						'bower_components/file-saver/FileSaver.js',
 					]
 				}

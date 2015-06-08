@@ -45,21 +45,24 @@ TODO:
 	<div class='panel-heading'>
 		<h3 class='panel-title'>Bishopric</h3>
 	</div>
-	<div class='panel-body'>
-		<div class='row' ng-show='d.bishopric' ng-repeat='member in d.bishopric'>
-			<div class='form-group col-xs-3'>
+	<div class='panel-body' sv-root sv-part="d.bishopric">
+		<div class='row' ng-show='d.bishopric' ng-repeat='member in d.bishopric' sv-element>
+			<div class='form-group col-xs-1'>
+				<span class='glyphicon glyphicon-th text-success' style='padding-top:30px; padding-left:10px; font-size:1.5em;' title='Click and move me' sv-handle></span>
+			</div>
+			<div class='form-group col-xs-4'>
 				<label class='control-label'>Position</label>
 				<select
 					class='form-control input-sm'
 					ng-model='member.position'
-					ng-options='p for p in bishopricPositions'>
+					ng-options="option as option for option in bishopricPositions">
 				</select>
 			</div>
-			<div class='form-group col-xs-4'>
+			<div class='form-group col-xs-3'>
 				<label class='control-label'>Name</label>
 				<input class='form-control input-sm' ng-model='member.name'/> 
 			</div>
-			<div class='form-group col-xs-4'>
+			<div class='form-group col-xs-3'>
 				<label class='control-label'>Phone</label>
 				<input class='form-control input-sm' ng-model='member.phone'/> 
 			</div>
@@ -83,9 +86,12 @@ TODO:
 	<div class='panel-heading'>
 		<h3 class='panel-title'>Leadership</h3>
 	</div>
-	<div class='panel-body'>
-		<div class='row' ng-show='d.leadership' ng-repeat='member in d.leadership'>
-			<div class='form-group col-xs-3'>
+	<div class='panel-body' sv-root sv-part='d.leadership'>
+		<div class='row' ng-show='d.leadership' ng-repeat='member in d.leadership' sv-element>
+			<div class='form-group col-xs-1'>
+				<span class='glyphicon glyphicon-th text-success' style='padding-top:30px; padding-left:10px; font-size:1.5em;' title='Click and move me' sv-handle></span>
+			</div>
+			<div class='form-group col-xs-4'>
 				<label class='control-label'>Position</label>
 				<select
 					class='form-control input-sm'
@@ -93,11 +99,11 @@ TODO:
 					ng-options='p for p in leadershipPositions'>
 				</select>
 			</div>
-			<div class='form-group col-xs-4'>
+			<div class='form-group col-xs-3'>
 				<label class='control-label'>Name</label>
 				<input class='form-control input-sm' ng-model='member.name'/> 
 			</div>
-			<div class='form-group col-xs-4'>
+			<div class='form-group col-xs-3'>
 				<label class='control-label'>Phone</label>
 				<input class='form-control input-sm' ng-model='member.phone'/> 
 			</div>
@@ -159,8 +165,10 @@ TODO:
 				<label class='control-label'>Country</label>
 				<input class='form-control input-sm' ng-model='member.country'/>
 			</div>
-<!--			Here is an hr that will only show up between rows... but it only shows up if we put something before it...-->
-<!--			<hr style='margin-left:16px; margin-right:16px' ng-show='d.missionaries.length > 1 && ($index != d.missionaries.length-1)' />-->
+			<!-- hr that only shows if more than one and this is not the last row -->
+			<div class='form-group col-xs-12'>
+				<hr ng-show='d.missionaries.length > 1 && ($index != d.missionaries.length - 1)'/>
+			</div>
 		</div>
 		
 		<div class='row' ng-show='!d.missionaries'>
@@ -168,6 +176,57 @@ TODO:
 				You have no missionaries yet, add some...
 			</div>
 		</div>
-		<button class='btn btn-success pull-right' ng-click='addMissionary();'>Add New</button>
+		<button class='btn btn-sm btn-success pull-right' ng-click='addMissionary();'>Add New</button>
+	</div>
+</div>
+
+<div class='panel panel-info'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>Announcements</h3>
+	</div>
+	<div class='panel-body' sv-root sv-part='d.announcements'>
+		<div class='row' ng-show='d.announcements' ng-repeat='event in d.announcements' sv-element>
+			<div class='form-group col-xs-1'>
+				<span class='glyphicon glyphicon-th text-success' style='padding-top:30px; padding-left:10px; font-size:1.5em;' title='Click and move me' sv-handle></span>
+			</div>
+			<div class='form-group col-xs-3'>
+				<label class='control-label'>Type</label>
+				<select
+					class='form-control input-sm'
+					ng-model='event.type'
+					ng-options='p.title for p in eventTypes'/>
+			</div>
+			<!-- Date for one time -->
+			<div class='form-group col-xs-3'>
+				<label class='control-label'>Date</label>
+				<input class='form-control input-sm' ng-model='event.date'/>
+			</div>
+			
+			<!-- Day of week for weekly repeating -->
+			
+			<!-- Day of month for monthly repeating -->
+			
+			
+			
+			<div class='form-group col-xs-3'>
+				<label class='control-label'>Time</label>
+				<input class='form-control input-sm' ng-model='event.time'/>
+			</div>
+			<div class='form-group col-xs-6'>
+				<label class='control-label'>Title</label>
+				<input class='form-control input-sm' ng-model='event.title'/>
+			</div>
+			<div class='form-group col-xs-12'>
+				<label class='control-label'>Description (optional)</label>
+				<input class='form-control input-sm' ng-model='event.description'/>
+			</div>
+		</div>
+		
+		<div class='row' ng-show='!d.announcements'>
+			<div class='col-sm-12'>
+				You have no announcements yet, add some...
+			</div>
+		</div>
+		<button class='btn btn-sm btn-success pull-right' ng-click='addAnnouncement();'>Add New</button>
 	</div>
 </div>
