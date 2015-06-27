@@ -43,3 +43,6 @@ source/fonts
 source/js/production.min.js
 source/js/production.min.js.map
 source/js/vendor.min.js
+
+# Release Files
+release

@@ -39,7 +39,41 @@ module.exports = function(grunt) {
 						'bower_components/file-saver/FileSaver.js',
 					]
 				}
-			}
+			},
+			releaseMine: {
+				options: {
+					wrap: true,
+					mangle: false,
+					banner: '/*\n * Copyright 2015 Jordan Roskelley\n */'
+				},
+				files: {
+					'release/js/production.min.js':
+					[
+						'source/js/app/services/**.js',
+						'source/js/app/filters/**.js',
+						'source/js/app/controllers/**.js',
+						'source/js/app/directives/**.js',
+						'source/js/app/configs/**.js',
+						'source/js/app/misc/**.js',
+						'source/js/app/app.js',
+					]
+				}
+			},
+			releaseVendor: {
+				files: {
+					'release/js/vendor.min.js':
+					[
+						'bower_components/jquery/dist/jquery.js',
+						'bower_components/lodash/lodash.js',
+						'bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
+						'bower_components/angular/angular.js',
+						'bower_components/angular-route/angular-route.js',
+						'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+						'bower_components/angular-sortable-view/src/angular-sortable-view.js',
+						'bower_components/file-saver/FileSaver.js',
+					]
+				}
+			},
 		},
 		/****************************************
 		 * Copy static files into served folder *
@@ -49,6 +83,30 @@ module.exports = function(grunt) {
 				cwd: 'bower_components/bootstrap-sass/assets/fonts/bootstrap',
 				src: '**/*',
 				dest: 'source/fonts',
+				expand: true,
+			},
+			releaseFonts: {
+				cwd: 'bower_components/bootstrap-sass/assets/fonts/bootstrap',
+				src: '**/*',
+				dest: 'release/fonts',
+				expand: true,
+			},
+			releaseImg: {
+				cwd: 'source/img',
+				src: '**/*',
+				dest: 'release/img',
+				expand: true,
+			},
+			releaseViews: {
+				cwd: 'source/views',
+				src: '**/*',
+				dest: 'release/views',
+				expand: true,
+			},
+			releaseIndex: {
+				cwd: 'source',
+				src: 'index.html',
+				dest: 'release',
 				expand: true,
 			},
 		},
@@ -64,7 +122,16 @@ module.exports = function(grunt) {
 					'source/css/styles.min.css':
 					['source/css/sass/styles.scss'],
 				}
-			}
+			},
+			release: {
+				options: {
+					style: 'compressed'
+				},
+				files: {
+					'release/css/styles.min.css':
+					['source/css/sass/styles.scss'],
+				}
+			},
 		},
 		/***********************
 		 * Run a static server *
@@ -123,5 +190,18 @@ module.exports = function(grunt) {
 							'sass:debug',
 							'connect:server',
 							'watch',
+						]);
+
+	grunt.registerTask('release',
+						'Create a version of the site that can be served',
+						[
+							'copy:releaseFonts',
+							'copy:releaseImg',
+							'copy:releaseViews',
+							'copy:releaseIndex',
+							
+							'uglify:releaseMine',
+							'uglify:releaseVendor',
+							'sass:release',
 						]);
 };
