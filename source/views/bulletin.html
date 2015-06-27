@@ -10,6 +10,7 @@ TODO:
 	program itself (probably enter on a different screen...)
 	front of program stuff (image, quote, etc)
 -->
+
 <h2>Bulletin</h2>
 <div class='row'>
 	<div class='form-group col-xs-4'>
@@ -189,7 +190,7 @@ TODO:
 			<div class='form-group col-xs-1'>
 				<span class='glyphicon glyphicon-th text-success' style='padding-top:30px; padding-left:10px; font-size:1.5em;' title='Click and move me' sv-handle></span>
 			</div>
-			<div class='form-group col-xs-3'>
+			<div class='form-group col-xs-4'>
 				<label class='control-label'>Type</label>
 				<select
 					class='form-control input-sm'
@@ -206,12 +207,19 @@ TODO:
 			
 			<!-- Day of month for monthly repeating -->
 			
-			
+			<!-- Begin time, end time, repeat interval, yikes -->
 			
 			<div class='form-group col-xs-3'>
 				<label class='control-label'>Time</label>
 				<input class='form-control input-sm' ng-model='event.time'/>
 			</div>
+			
+			<div class='input-group col-xs-1' style='padding-top:26px'>
+				<button class="btn btn-sm btn-danger" ng-click="removeAnnouncement($index)">
+					<span class="glyphicon glyphicon-trash"></span>
+				</button>
+			</div>
+			
 			<div class='form-group col-xs-6'>
 				<label class='control-label'>Title</label>
 				<input class='form-control input-sm' ng-model='event.title'/>
@@ -228,5 +236,102 @@ TODO:
 			</div>
 		</div>
 		<button class='btn btn-sm btn-success pull-right' ng-click='addAnnouncement();'>Add New</button>
+	</div>
+</div>
+
+<div class='panel panel-info'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>Cover</h3>
+	</div>
+	<div class='panel-body'>
+		<div class='row'>
+			<div class='form-group col-sm-12'>
+				<label class='control-label'>Image URL</label>
+				<input class='form-control input-sm' ng-model='d.cover.imageUrl' />
+				<p class='help-block'>Find an image and paste it's URL here</p>
+			</div>
+			<div class='form-group col-sm-12' ng-show='d.cover.imageUrl'>
+				<img class='img-thumbnail' ng-src='{{ d.cover.imageUrl }}' />
+			</div>
+			<div class='form-group col-sm-12'>
+				<label class='control-label'>Quote</label>
+				<textarea class='form-control' rows='4' ng-model='d.cover.quote'></textarea>
+			</div>
+			<div class='form-group col-sm-12'>
+				<label class='control-label'>Quote Author</label>
+				<input class='form-control input-sm' ng-model='d.cover.author' />
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class='panel panel-info'>
+	<div class='panel-heading'>
+		<h3 class='panel-title'>Program</h3>
+	</div>
+	<div class='panel-body'>
+		
+		<!-- TODO: enable drag n drop -->
+		<!-- TODO: add edit and delete (enable changing type in edit) -->
+		<div ng-repeat='e in d.program.events'>
+			<div class='row'>
+				<div class='form-group col-sm-4'>
+					<label class='control-label'>Event Type</label>
+					<select 
+						class='form-control input-sm' 
+						ng-model='e.type' 
+						ng-options='type for type in programEventTypes'></select>
+				</div>
+			</div>
+
+			<div class='row'>
+				
+				<!-- Begin Speaker Type Edit -->
+				<div ng-show='e.type == "Speaker" && e.isEditing'>
+					<!-- TODO: somehow, when they select speaker, set left to 'Speaker' -->
+					<div class='form-group col-sm-4'>
+						<label class='control-label'>Name</label>
+						<input class='form-control input-sm' ng-model='e.right' />
+					</div>
+				</div>
+				<!-- End Speaker Type Edit -->
+				
+				<!-- Begin Hymn Type Edit -->
+				<div ng-show='e.type == "Hymn" && e.isEditing'>
+					<div class='form-group col-sm-4'>
+						<label class='control-label'>Hymn Kind</label>
+						<input class='form-control input-sm' placeholder='Opening Hymn' ng-model='e.left' />
+					</div>
+					<div class='form-group col-sm-8'>
+						<label class='control-label'>Hymn</label>
+						<select 
+							class='form-control input-sm' 
+							ng-model='e.hymn'
+							ng-change='changeHymn(e)'
+							ng-options='h.number as (h.number + " " + h.name) for h in hymns'></select>
+					</div>
+				</div>
+				<!-- End Hymn Type Edit -->
+				
+				<!-- Begin Other Type Edit -->
+				<div ng-show='e.type == "Other" && e.isEditing'>
+					<div class='form-group col-sm-4'>
+						<label class='control-label'>Left Text</label>
+						<input class='form-control input-sm' ng-model='e.left' />
+					</div>
+					<div class='form-group col-sm-4'>
+						<label class='control-label'>Center Text</label>
+						<input class='form-control input-sm' ng-model='e.center' />
+					</div>
+					<div class='form-group col-sm-4'>
+						<label class='control-label'>Right Text</label>
+						<input class='form-control input-sm' ng-model='e.right' />
+					</div>
+				</div>
+				<!-- End Other Type Edit -->
+			</div>
+			<pre>{{ e }}</pre>
+		</div>
+		<button class='btn btn-sm btn-success pull-right' ng-click='addProgramEvent();'>Add Event</button>
 	</div>
 </div>

@@ -1,7 +1,21 @@
 /// <reference path="../../../../typings/angularjs/angular.d.ts"/>
+/// <reference path="../../../../bower_components/lodash/lodash.js"/>
 function BulletinController($scope, $routeParams, $http, Data, Lookup) {
 	function init() {
 		Data.init();
+		
+		/*
+		//http://broadcast3.lds.org/crowdsource/Mobile/LDSMusic/Staging/Collections/Hymns-EN/55/Collection.json
+		//but it has no CORS :(
+		
+		$http.
+			get('hymn.json').
+			success(function(data) {
+				var hymnData = _.map(data.items, function(row) {
+					return { number: row.number, name: row.name };
+				});
+			});
+		*/
 		
 		//get index of selected bulletin
 		var selectedIndex = -1;
@@ -14,6 +28,8 @@ function BulletinController($scope, $routeParams, $http, Data, Lookup) {
 		$scope.bishopricPositions = Lookup.bishopricPositions;
 		$scope.leadershipPositions = Lookup.leadershipPositions;
 		$scope.eventTypes = Lookup.eventTypes;
+		$scope.hymns = Lookup.hymns;
+		$scope.programEventTypes = Lookup.programEventTypes;
 		
 		//bind single bulletin into scope
 		$scope.d = Data.data[selectedIndex];
@@ -69,6 +85,20 @@ function BulletinController($scope, $routeParams, $http, Data, Lookup) {
 	$scope.removeAnnouncement = function (index) {
 		$scope.d.announcements.splice(index, 1);
 	};
+	
+	$scope.addProgramEvent = function() {
+		if(!$scope.d.program) {
+			$scope.d.program = { events: [] };
+		}
+		
+		//automatically start editing new ones
+		$scope.d.program.events.push({ isEditing: true });
+	};
+	
+	$scope.changeHymn = function (e) {
+		e.center = e.hymn.name;
+		e.right = e.hymn.number;
+	}
 	
 	//functions/setup for date picker
 	$scope.open = function($event) {

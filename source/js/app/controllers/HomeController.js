@@ -6,8 +6,6 @@ TODO:
 */
 
 function HomeController($scope, $location, Data) {
-	$scope.TESTING = "HELLO FROM HOME";
-	
 	// Preload data
 	function init() {
 		//set up data (load or initialize)
